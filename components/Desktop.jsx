@@ -9,263 +9,168 @@ import ProjectsWindow from './windows/ProjectsWindow';
 import ExperienceWindow from './windows/ExperienceWindow';
 import ContactWindow from './windows/ContactWindow';
 
-const INITIAL_WINDOWS = [
-  {
-    id: 'about',
-    title: 'About Soham',
-    icon: '🧑‍💻',
-    isOpen: false,
-    isMinimized: false,
-    isMaximized: false,
-    x: 80,
-    y: 60,
-    width: 720,
-    height: 530,
-    zIndex: 10,
-    hasSidebar: false,
-  },
-  {
-    id: 'skills',
-    title: 'Terminal — Skills',
-    icon: '⌨️',
-    isOpen: false,
-    isMinimized: false,
-    isMaximized: false,
-    x: 140,
-    y: 80,
-    width: 680,
-    height: 500,
-    zIndex: 10,
-    hasSidebar: false,
-  },
-  {
-    id: 'projects',
-    title: 'Projects',
-    icon: '🚀',
-    isOpen: false,
-    isMinimized: false,
-    isMaximized: false,
-    x: 100,
-    y: 70,
-    width: 800,
-    height: 560,
-    zIndex: 10,
-    hasSidebar: false,
-  },
-  {
-    id: 'experience',
-    title: 'Experience & Education',
-    icon: '💼',
-    isOpen: false,
-    isMinimized: false,
-    isMaximized: false,
-    x: 110,
-    y: 75,
-    width: 740,
-    height: 540,
-    zIndex: 10,
-    hasSidebar: false,
-  },
-  {
-    id: 'contact',
-    title: 'Contact — Soham Bagal',
-    icon: '✉️',
-    isOpen: false,
-    isMinimized: false,
-    isMaximized: false,
-    x: 180,
-    y: 100,
-    width: 660,
-    height: 480,
-    zIndex: 10,
-    hasSidebar: false,
-  },
+const DEFAULTS = [
+  { id:'about',      title:'About Soham',            icon:'🧑‍💻', x:60,  y:50,  w:760, h:550 },
+  { id:'skills',     title:'Terminal — Skills',       icon:'⌨️',  x:120, y:80,  w:700, h:520 },
+  { id:'projects',   title:'Projects',                icon:'🚀',  x:90,  y:60,  w:820, h:570 },
+  { id:'experience', title:'Experience & Education',  icon:'💼',  x:80,  y:55,  w:760, h:560 },
+  { id:'contact',    title:'Contact — Soham Bagal',  icon:'✉️',  x:140, y:90,  w:680, h:490 },
 ];
 
-const WINDOW_CONTENT = {
-  about: <AboutWindow />,
-  skills: <SkillsWindow />,
-  projects: <ProjectsWindow />,
-  experience: <ExperienceWindow />,
-  contact: <ContactWindow />,
+const CONTENT = {
+  about:<AboutWindow/>, skills:<SkillsWindow/>,
+  projects:<ProjectsWindow/>, experience:<ExperienceWindow/>,
+  contact:<ContactWindow/>,
 };
 
-let zCounter = 20;
+let Z = 20;
+
+function makeWin(d) {
+  return { ...d, width:d.w, height:d.h, isOpen:false, isMinimized:false, isMaximized:false, zIndex:10 };
+}
+
+// Desktop shortcut icons
+const DESKTOP_ICONS = [
+  { id:'about',      emoji:'🧑‍💻', label:'About Me' },
+  { id:'projects',   emoji:'🚀',  label:'Projects' },
+  { id:'skills',     emoji:'⌨️',  label:'Skills' },
+  { id:'experience', emoji:'💼',  label:'Experience' },
+  { id:'contact',    emoji:'✉️',  label:'Contact' },
+];
 
 export default function Desktop() {
-  const [windows, setWindows] = useState(INITIAL_WINDOWS);
-  const [showWelcome, setShowWelcome] = useState(true);
+  const [windows, setWindows] = useState(DEFAULTS.map(makeWin));
+  const [boot, setBoot] = useState(true);
 
-  useEffect(() => {
-    const t = setTimeout(() => setShowWelcome(false), 2500);
-    return () => clearTimeout(t);
+  useEffect(() => { setTimeout(()=>setBoot(false), 2200); }, []);
+
+  const open = useCallback((id) => {
+    Z++;
+    setWindows(ws => ws.map(w => w.id===id ? {...w, isOpen:true, isMinimized:false, zIndex:Z} : w));
   }, []);
 
-  const openWindow = useCallback((id) => {
-    zCounter++;
-    setWindows((ws) =>
-      ws.map((w) =>
-        w.id === id
-          ? { ...w, isOpen: true, isMinimized: false, zIndex: zCounter }
-          : w
-      )
-    );
-  }, []);
+  const close = useCallback((id) => setWindows(ws=>ws.map(w=>w.id===id?{...w,isOpen:false}:w)), []);
+  const minimize = useCallback((id) => setWindows(ws=>ws.map(w=>w.id===id?{...w,isMinimized:true}:w)), []);
+  const maximize = useCallback((id) => setWindows(ws=>ws.map(w=>w.id===id?{...w,isMaximized:!w.isMaximized}:w)), []);
+  const focus = useCallback((id) => { Z++; setWindows(ws=>ws.map(w=>w.id===id?{...w,zIndex:Z}:w)); }, []);
+  const move = useCallback((id,x,y) => setWindows(ws=>ws.map(w=>w.id===id?{...w,x,y}:w)), []);
 
-  const closeWindow = useCallback((id) => {
-    setWindows((ws) => ws.map((w) => (w.id === id ? { ...w, isOpen: false } : w)));
-  }, []);
-
-  const minimizeWindow = useCallback((id) => {
-    setWindows((ws) => ws.map((w) => (w.id === id ? { ...w, isMinimized: true } : w)));
-  }, []);
-
-  const maximizeWindow = useCallback((id) => {
-    setWindows((ws) =>
-      ws.map((w) => (w.id === id ? { ...w, isMaximized: !w.isMaximized } : w))
-    );
-  }, []);
-
-  const focusWindow = useCallback((id) => {
-    zCounter++;
-    setWindows((ws) =>
-      ws.map((w) => (w.id === id ? { ...w, zIndex: zCounter } : w))
-    );
-  }, []);
-
-  const moveWindow = useCallback((id, x, y) => {
-    setWindows((ws) => ws.map((w) => (w.id === id ? { ...w, x, y } : w)));
-  }, []);
-
-  const openAllWindows = () => {
-    const ids = ['about', 'skills', 'projects'];
-    let z = zCounter;
-    setWindows((ws) =>
-      ws.map((w) => {
-        if (ids.includes(w.id)) {
-          z++;
-          return { ...w, isOpen: true, isMinimized: false, zIndex: z };
-        }
-        return w;
-      })
-    );
-    zCounter = z;
-  };
+  const noneOpen = windows.every(w => !w.isOpen || w.isMinimized);
 
   return (
-    <div
-      className="desktop-bg"
-      style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}
-      onClick={() => {}}
-    >
-      {/* Welcome splash */}
-      {showWelcome && (
-        <div
-          style={{
-            position: 'fixed', inset: 0, zIndex: 99999,
-            background: 'rgba(8,12,20,0.97)',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-            animation: 'fadeIn 0.5s ease forwards',
-          }}
-        >
-          <div style={{ fontSize: 64, marginBottom: 16 }}>🧑‍💻</div>
-          <h1 style={{ fontSize: 32, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>
+    <div className="desktop-bg" style={{width:'100vw',height:'100vh',position:'relative',overflow:'hidden'}}>
+
+      {/* Boot screen */}
+      {boot && (
+        <div style={{
+          position:'fixed',inset:0,zIndex:99999,
+          background:'#000',
+          display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',
+          animation:'bootOut 2.2s ease forwards',
+        }}>
+          <div style={{fontSize:72,marginBottom:20,animation:'fadeUp 0.5s ease 0.3s both'}}>
+            🧑‍💻
+          </div>
+          <div style={{fontSize:28,fontWeight:700,letterSpacing:-0.5,animation:'fadeUp 0.5s ease 0.5s both'}}>
             Soham Bagal
-          </h1>
-          <p style={{ fontSize: 16, color: 'var(--accent)' }}>Data Engineer & Full Stack Developer</p>
-          <div style={{ marginTop: 32, display: 'flex', gap: 6 }}>
-            {[0, 1, 2].map((i) => (
-              <div
-                key={i}
-                style={{
-                  width: 6, height: 6, borderRadius: '50%', background: 'var(--text-tertiary)',
-                  animation: `terminalBlink 1s ease ${i * 0.3}s infinite`,
-                }}
-              />
+          </div>
+          <div style={{fontSize:14,color:'var(--accent)',marginTop:8,animation:'fadeUp 0.5s ease 0.7s both'}}>
+            Data Engineer & Full Stack Developer
+          </div>
+          <div style={{display:'flex',gap:5,marginTop:36,animation:'fadeUp 0.5s ease 1s both'}}>
+            {[0,1,2].map(i=>(
+              <div key={i} style={{
+                width:5,height:5,borderRadius:'50%',background:'var(--text-tertiary)',
+                animation:`blink 1.2s ease ${i*0.35}s infinite`,
+              }}/>
             ))}
           </div>
         </div>
       )}
 
       {/* Menu bar */}
-      <MenuBar windows={windows} onOpenWindow={openWindow} />
+      <MenuBar onOpenWindow={open}/>
 
       {/* Desktop area */}
-      <div
-        style={{
-          position: 'absolute', inset: 0,
-          paddingTop: 28,
-          paddingBottom: 120,
-        }}
-      >
-        {/* Desktop greeting (shown when no windows are open) */}
-        {windows.every((w) => !w.isOpen || w.isMinimized) && !showWelcome && (
-          <div
-            style={{
-              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-              height: '100%', gap: 16,
-            }}
-          >
-            <div
-              style={{
-                padding: '32px 48px',
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.07)',
-                borderRadius: 20,
-                backdropFilter: 'blur(20px)',
-                textAlign: 'center',
-                maxWidth: 480,
-              }}
-            >
-              <div style={{ fontSize: 48, marginBottom: 12 }}>👋</div>
-              <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 6 }}>
+      <div style={{position:'absolute',inset:0,paddingTop:28,paddingBottom:120}}>
+
+        {/* Desktop icons — top right */}
+        <div style={{
+          position:'absolute',top:16,right:16,display:'flex',flexDirection:'column',gap:4,
+        }}>
+          {DESKTOP_ICONS.map(icon=>(
+            <div key={icon.id} className="desk-icon" onDoubleClick={()=>open(icon.id)}>
+              <div style={{
+                width:52,height:52,borderRadius:12,
+                background:'rgba(255,255,255,0.06)',
+                border:'1px solid rgba(255,255,255,0.1)',
+                display:'flex',alignItems:'center',justifyContent:'center',
+                fontSize:26,
+              }}>{icon.emoji}</div>
+              <span>{icon.label}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Welcome card shown when no windows open */}
+        {noneOpen && !boot && (
+          <div style={{
+            display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',
+            height:'100%',
+          }}>
+            <div style={{
+              padding:'36px 52px',maxWidth:500,textAlign:'center',
+              background:'rgba(255,255,255,0.025)',
+              border:'1px solid rgba(255,255,255,0.08)',
+              borderRadius:20,backdropFilter:'blur(20px)',
+            }}>
+              {/* GitHub streak */}
+              <img
+                src="https://github-readme-streak-stats.herokuapp.com/?user=bagalsoham&theme=dark&background=00000000&hide_border=true&stroke=0ea5e9&ring=0ea5e9&fire=f59e0b&currStreakLabel=0ea5e9"
+                alt="GitHub streak"
+                style={{maxWidth:'100%',borderRadius:10,marginBottom:20}}
+                onError={e=>e.target.style.display='none'}
+              />
+              <div style={{fontSize:44,marginBottom:12}}>👋</div>
+              <h1 style={{fontSize:26,fontWeight:700,marginBottom:6}}>
                 Hi, I'm{' '}
-                <span className="glow-text" style={{ color: 'var(--accent)' }}>Soham Bagal</span>
+                <span style={{color:'var(--accent)',textShadow:'0 0 20px rgba(14,165,233,0.5)'}}>
+                  Soham Bagal
+                </span>
               </h1>
-              <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: 20 }}>
-                Data Engineering Intern at Bajaj Finserv · B.Tech IT @ KJ Somaiya ·
-                Building scalable pipelines, AI systems & full-stack apps.
+              <p style={{fontSize:14,color:'var(--text-secondary)',lineHeight:1.8,marginBottom:24}}>
+                Data Engineering Intern @ Bajaj Finserv · B.Tech IT @ KJ Somaiya<br/>
+                Building AI pipelines, data systems & full-stack applications.
               </p>
-              <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
-                <button
-                  className="mac-btn"
-                  onClick={openAllWindows}
-                >
+              <div style={{display:'flex',gap:10,justifyContent:'center',flexWrap:'wrap'}}>
+                <button className="mac-btn" onClick={()=>{open('about');open('projects');open('experience');}}>
                   Explore Portfolio ↗
                 </button>
-                <button
-                  className="mac-btn"
-                  style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: 'var(--text)' }}
-                  onClick={() => openWindow('contact')}
+                <button className="mac-btn"
+                  style={{background:'rgba(255,255,255,0.06)',border:'1px solid rgba(255,255,255,0.12)',color:'var(--text)'}}
+                  onClick={()=>open('contact')}
                 >
-                  Get in Touch ✉️
+                  Contact Me ✉️
                 </button>
               </div>
             </div>
-            <p style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>
-              Click icons in the dock below to open windows ↓
+            <p style={{fontSize:12,color:'var(--text-tertiary)',marginTop:16}}>
+              Double-click icons on the right · Or use the dock below ↓
             </p>
           </div>
         )}
       </div>
 
       {/* Windows */}
-      {windows.map((win) => (
-        <MacWindow
-          key={win.id}
-          {...win}
-          onClose={closeWindow}
-          onMinimize={minimizeWindow}
-          onMaximize={maximizeWindow}
-          onFocus={focusWindow}
-          onMove={moveWindow}
-        >
-          {WINDOW_CONTENT[win.id]}
+      {windows.map(w=>(
+        <MacWindow key={w.id} {...w} onClose={close} onMinimize={minimize}
+          onMaximize={maximize} onFocus={focus} onMove={move}>
+          {CONTENT[w.id]}
         </MacWindow>
       ))}
 
       {/* Dock */}
-      <Dock windows={windows} onOpenWindow={openWindow} />
+      <Dock windows={windows} onOpenWindow={open}/>
     </div>
   );
 }

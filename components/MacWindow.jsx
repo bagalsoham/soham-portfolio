@@ -2,162 +2,87 @@
 import { useRef, useCallback } from 'react';
 
 export default function MacWindow({
-  id,
-  title,
-  icon,
-  children,
-  isOpen,
-  isMinimized,
-  isMaximized,
-  x,
-  y,
-  width,
-  height,
-  zIndex,
-  onClose,
-  onMinimize,
-  onMaximize,
-  onFocus,
-  onMove,
-  sidebarContent,
+  id, title, icon, children,
+  isOpen, isMinimized, isMaximized,
+  x, y, width, height, zIndex,
+  onClose, onMinimize, onMaximize, onFocus, onMove,
 }) {
-  const windowRef = useRef(null);
-  const dragRef = useRef(null);
+  const ref = useRef(null);
+  const drag = useRef(null);
 
-  const handleTitlebarMouseDown = useCallback(
-    (e) => {
-      if (isMaximized) return;
-      if (e.target.closest('.traffic-btn')) return;
-      e.preventDefault();
-      onFocus(id);
+  const onTitleDown = useCallback((e) => {
+    if (isMaximized || e.target.closest('.tl')) return;
+    e.preventDefault();
+    onFocus(id);
+    const r = ref.current.getBoundingClientRect();
+    drag.current = { mx: e.clientX, my: e.clientY, ox: r.left, oy: r.top };
+    document.body.style.cursor = 'grabbing';
 
-      const rect = windowRef.current.getBoundingClientRect();
-      dragRef.current = {
-        startMouseX: e.clientX,
-        startMouseY: e.clientY,
-        startLeft: rect.left,
-        startTop: rect.top,
-      };
-
-      document.body.classList.add('dragging');
-
-      const handleMouseMove = (e) => {
-        if (!dragRef.current) return;
-        const dx = e.clientX - dragRef.current.startMouseX;
-        const dy = e.clientY - dragRef.current.startMouseY;
-        const newX = Math.max(0, dragRef.current.startLeft + dx);
-        const newY = Math.max(28, dragRef.current.startTop + dy);
-        if (windowRef.current) {
-          windowRef.current.style.left = newX + 'px';
-          windowRef.current.style.top = newY + 'px';
-        }
-      };
-
-      const handleMouseUp = (e) => {
-        if (!dragRef.current) return;
-        const dx = e.clientX - dragRef.current.startMouseX;
-        const dy = e.clientY - dragRef.current.startMouseY;
-        const newX = Math.max(0, dragRef.current.startLeft + dx);
-        const newY = Math.max(28, dragRef.current.startTop + dy);
-        dragRef.current = null;
-        document.body.classList.remove('dragging');
-        onMove(id, newX, newY);
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
-      };
-
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-    },
-    [id, isMaximized, onFocus, onMove]
-  );
+    const move = (e) => {
+      if (!drag.current) return;
+      const nx = Math.max(0, drag.current.ox + e.clientX - drag.current.mx);
+      const ny = Math.max(28, drag.current.oy + e.clientY - drag.current.my);
+      ref.current.style.left = nx + 'px';
+      ref.current.style.top  = ny + 'px';
+    };
+    const up = (e) => {
+      if (!drag.current) return;
+      const nx = Math.max(0, drag.current.ox + e.clientX - drag.current.mx);
+      const ny = Math.max(28, drag.current.oy + e.clientY - drag.current.my);
+      drag.current = null;
+      document.body.style.cursor = '';
+      onMove(id, nx, ny);
+      document.removeEventListener('mousemove', move);
+      document.removeEventListener('mouseup', up);
+    };
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', up);
+  }, [id, isMaximized, onFocus, onMove]);
 
   if (!isOpen || isMinimized) return null;
 
   const style = isMaximized
-    ? {
-        position: 'fixed',
-        left: 0,
-        top: 28,
-        width: '100vw',
-        height: 'calc(100vh - 28px)',
-        zIndex,
-        borderRadius: 0,
-      }
-    : {
-        position: 'fixed',
-        left: x,
-        top: y,
-        width,
-        height,
-        zIndex,
-        borderRadius: '12px',
-      };
+    ? { position:'fixed', left:0, top:28, width:'100vw', height:'calc(100vh - 28px)', zIndex, borderRadius:0 }
+    : { position:'fixed', left:x, top:y, width, height, zIndex, borderRadius:12 };
 
   return (
-    <div
-      ref={windowRef}
-      style={style}
-      className="window-glass overflow-hidden window-enter flex flex-col"
+    <div ref={ref} style={style}
+      className="window-glass overflow-hidden win-enter flex flex-col"
       onMouseDown={() => onFocus(id)}
     >
       {/* Title bar */}
       <div
-        className="flex items-center px-4 flex-shrink-0"
         style={{
-          height: 44,
-          background: 'var(--titlebar)',
-          borderBottom: '1px solid var(--border)',
+          height:44, background:'var(--titlebar)',
+          borderBottom:'1px solid var(--titlebar-border)',
+          display:'flex', alignItems:'center', paddingLeft:16, paddingRight:16,
+          flexShrink:0, position:'relative',
           cursor: isMaximized ? 'default' : 'grab',
         }}
-        onMouseDown={handleTitlebarMouseDown}
+        onMouseDown={onTitleDown}
         onDoubleClick={() => onMaximize(id)}
       >
         {/* Traffic lights */}
-        <div className="traffic-lights">
-          <button
-            className="traffic-btn traffic-btn-red"
-            title="Close"
-            onMouseDown={(e) => e.stopPropagation()}
-            onClick={(e) => { e.stopPropagation(); onClose(id); }}
-          />
-          <button
-            className="traffic-btn traffic-btn-yellow"
-            title="Minimize"
-            onMouseDown={(e) => e.stopPropagation()}
-            onClick={(e) => { e.stopPropagation(); onMinimize(id); }}
-          />
-          <button
-            className="traffic-btn traffic-btn-green"
-            title="Maximize"
-            onMouseDown={(e) => e.stopPropagation()}
-            onClick={(e) => { e.stopPropagation(); onMaximize(id); }}
-          />
+        <div className="tl-wrap" onMouseDown={e => e.stopPropagation()}>
+          <button className="tl tl-r" onClick={e=>{e.stopPropagation();onClose(id);}} title="Close"/>
+          <button className="tl tl-y" onClick={e=>{e.stopPropagation();onMinimize(id);}} title="Minimize"/>
+          <button className="tl tl-g" onClick={e=>{e.stopPropagation();onMaximize(id);}} title="Zoom"/>
         </div>
-
         {/* Title */}
-        <div
-          className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2"
-          style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 500, pointerEvents: 'none' }}
-        >
-          <span>{icon}</span>
+        <div style={{
+          position:'absolute', left:'50%', transform:'translateX(-50%)',
+          display:'flex', alignItems:'center', gap:7,
+          fontSize:13, fontWeight:500, color:'rgba(255,255,255,0.7)',
+          pointerEvents:'none', whiteSpace:'nowrap',
+        }}>
+          <span style={{fontSize:15}}>{icon}</span>
           <span>{title}</span>
         </div>
       </div>
 
-      {/* Content area */}
-      <div className="flex flex-1 min-h-0">
-        {sidebarContent && (
-          <div
-            className="finder-sidebar flex-shrink-0 overflow-y-auto"
-            style={{ width: 180, padding: '12px 8px' }}
-          >
-            {sidebarContent}
-          </div>
-        )}
-        <div className="flex-1 overflow-y-auto" style={{ color: 'var(--text)' }}>
-          {children}
-        </div>
+      {/* Content */}
+      <div style={{flex:1, minHeight:0, display:'flex', overflow:'hidden'}}>
+        {children}
       </div>
     </div>
   );

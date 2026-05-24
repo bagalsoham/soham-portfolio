@@ -1,134 +1,141 @@
 'use client';
 import { useState, useEffect } from 'react';
 
-const SKILL_CATEGORIES = [
+// skillicons.dev icons - using img tags
+const ICON_URL = (icons) =>
+  `https://skillicons.dev/icons?i=${icons.join(',')}&theme=dark`;
+
+const CATS = [
   {
-    category: 'Languages',
-    color: '#f59e0b',
-    skills: ['Python', 'Java', 'JavaScript', 'SQL', 'PHP', 'C++'],
+    label:'Languages', color:'#f59e0b',
+    icons:['python','java','js','php','cpp'],
+    extras:['SQL','C++'],
+    skillicons:['python','java','js','php','cpp'],
   },
   {
-    category: 'Frontend',
-    color: '#3b82f6',
-    skills: ['React.js', 'Next.js', 'HTML5', 'CSS3', 'Redux Toolkit'],
+    label:'Frontend', color:'#3b82f6',
+    icons:['react','nextjs','html','css','redux'],
+    extras:[],
+    skillicons:['react','nextjs','html','css','redux'],
   },
   {
-    category: 'Backend',
-    color: '#10b981',
-    skills: ['Node.js', 'Express.js', 'Laravel', 'REST APIs'],
+    label:'Backend', color:'#10b981',
+    icons:['nodejs','express','laravel'],
+    extras:['REST APIs'],
+    skillicons:['nodejs','express','laravel'],
   },
   {
-    category: 'Databases',
-    color: '#8b5cf6',
-    skills: ['PostgreSQL', 'MySQL', 'MongoDB', 'FAISS', 'Delta Lake'],
+    label:'Databases', color:'#8b5cf6',
+    icons:['mongodb','mysql','postgres'],
+    extras:['FAISS','Delta Lake'],
+    skillicons:['mongodb','mysql','postgres'],
   },
   {
-    category: 'Cloud & DevOps',
-    color: '#0ea5e9',
-    skills: ['AWS', 'Docker', 'Git', 'CI/CD', 'Databricks', 'Power Automate'],
+    label:'Cloud & DevOps', color:'#0ea5e9',
+    icons:['aws','docker','git','azure'],
+    extras:['Power Automate','Databricks'],
+    skillicons:['aws','docker','git','azure'],
   },
   {
-    category: 'AI & Data Engineering',
-    color: '#ec4899',
-    skills: ['PySpark', 'LangChain', 'LangGraph', 'RAG', 'MLflow', 'Azure OpenAI'],
+    label:'AI & Data Eng', color:'#ec4899',
+    icons:[],
+    extras:['PySpark','LangChain','LangGraph','RAG','MLflow','Azure OpenAI'],
+    skillicons:[],
   },
 ];
 
-const TERMINAL_LINES = [
-  { delay: 0,   text: '$ whoami', type: 'cmd' },
-  { delay: 300, text: 'soham_bagal', type: 'out' },
-  { delay: 600, text: '$ cat skills.json', type: 'cmd' },
-  { delay: 900, text: '{', type: 'out' },
-  { delay: 1000, text: '  "role": "Data Engineer & Full Stack Developer",', type: 'out' },
-  { delay: 1100, text: '  "experience": "2 Internships",', type: 'out' },
-  { delay: 1200, text: '  "status": "Open to opportunities",', type: 'out' },
-  { delay: 1300, text: '}', type: 'out' },
-  { delay: 1600, text: '$ ls skills/', type: 'cmd' },
-  { delay: 1900, text: 'languages/  frontend/  backend/  databases/  cloud/  ai-data/', type: 'out' },
-  { delay: 2200, text: '$ echo "Ready to build scalable systems 🚀"', type: 'cmd' },
-  { delay: 2500, text: 'Ready to build scalable systems 🚀', type: 'out' },
+const TERMINAL = [
+  {t:0,   cmd:true,  text:'soham@portfolio % python3 skills.py'},
+  {t:400, cmd:false, text:'>>> Loading skill matrix...'},
+  {t:900, cmd:false, text:'>>> Languages   : [Python, Java, JS, SQL, PHP, C++]'},
+  {t:1200,cmd:false, text:'>>> AI/DE Stack : [PySpark, LangGraph, LangChain, RAG, MLflow]'},
+  {t:1500,cmd:false, text:'>>> Cloud       : [AWS, Azure, Docker, Databricks]'},
+  {t:1800,cmd:false, text:'>>> Status      : Open to Data Engineering roles 🚀'},
+  {t:2100,cmd:true,  text:'soham@portfolio % _'},
 ];
 
 export default function SkillsWindow() {
-  const [visibleLines, setVisibleLines] = useState(0);
+  const [vis, setVis] = useState(0);
+  const [tab, setTab] = useState('skills');
 
   useEffect(() => {
-    const timers = TERMINAL_LINES.map((line, i) =>
-      setTimeout(() => setVisibleLines((v) => Math.max(v, i + 1)), line.delay)
-    );
-    return () => timers.forEach(clearTimeout);
+    const ts = TERMINAL.map((l,i)=>setTimeout(()=>setVis(v=>Math.max(v,i+1)), l.t));
+    return () => ts.forEach(clearTimeout);
   }, []);
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      {/* Terminal section */}
-      <div
-        className="terminal-bg"
-        style={{ padding: '16px 20px', flexShrink: 0, borderBottom: '1px solid rgba(255,255,255,0.06)' }}
-      >
-        {TERMINAL_LINES.slice(0, visibleLines).map((line, i) => (
-          <div key={i} className="terminal-line" style={{ marginBottom: 2 }}>
-            {line.type === 'cmd' ? (
-              <span>
-                <span style={{ color: '#30d158' }}>soham</span>
-                <span style={{ color: '#98989d' }}>@</span>
-                <span style={{ color: '#0ea5e9' }}>portfolio</span>
-                <span style={{ color: '#98989d' }}> % </span>
-                <span style={{ color: '#f5f5f7' }}>{line.text.replace('$ ', '')}</span>
-              </span>
-            ) : (
-              <span style={{ color: '#a0aec0' }}>{line.text}</span>
-            )}
-          </div>
+    <div style={{display:'flex',flexDirection:'column',height:'100%',overflow:'hidden'}}>
+      {/* Tab bar */}
+      <div style={{
+        display:'flex',gap:1,padding:'8px 16px 0',flexShrink:0,
+        background:'rgba(0,0,0,0.2)',borderBottom:'1px solid var(--border)',
+      }}>
+        {[['skills','Skills Grid'],['terminal','Terminal']].map(([k,l])=>(
+          <button key={k} onClick={()=>setTab(k)} style={{
+            padding:'6px 16px',fontSize:13,border:'none',cursor:'pointer',fontFamily:'inherit',
+            borderRadius:'6px 6px 0 0',
+            background: tab===k ? 'var(--window-bg)' : 'transparent',
+            color: tab===k ? 'var(--text)' : 'var(--text-tertiary)',
+            borderBottom: tab===k ? '2px solid var(--accent)' : '2px solid transparent',
+          }}>{l}</button>
         ))}
-        {visibleLines >= TERMINAL_LINES.length && (
-          <div className="terminal-line" style={{ marginTop: 4 }}>
-            <span style={{ color: '#30d158' }}>soham</span>
-            <span style={{ color: '#98989d' }}>@</span>
-            <span style={{ color: '#0ea5e9' }}>portfolio</span>
-            <span style={{ color: '#98989d' }}> % </span>
-            <span className="cursor-blink" style={{ color: '#f5f5f7' }}>█</span>
-          </div>
-        )}
       </div>
 
-      {/* Skills grid */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
-        <p style={{ fontSize: 12, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>
-          Technical Skills
-        </p>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-          {SKILL_CATEGORIES.map((cat) => (
-            <div
-              key={cat.category}
-              style={{
-                background: 'rgba(255,255,255,0.025)',
-                border: '1px solid rgba(255,255,255,0.07)',
-                borderRadius: 12,
-                padding: 14,
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-                <div style={{ width: 8, height: 8, borderRadius: '50%', background: cat.color, flexShrink: 0 }} />
-                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                  {cat.category}
-                </span>
-              </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                {cat.skills.map((s) => (
-                  <span
-                    key={s}
-                    className="skill-badge"
-                    style={{ borderColor: `${cat.color}33`, color: cat.color, background: `${cat.color}11` }}
-                  >
-                    {s}
-                  </span>
-                ))}
-              </div>
+      {tab==='terminal' ? (
+        /* Terminal */
+        <div className="term-bg" style={{flex:1,padding:'20px 24px',overflowY:'auto'}}>
+          {TERMINAL.slice(0,vis).map((l,i)=>(
+            <div key={i} className="term-line" style={{marginBottom:2}}>
+              {l.cmd
+                ? <span style={{color:'#30d158'}}>{l.text.replace('% _','% ')}<span className={i===vis-1&&l.text.endsWith('_')?'blink':''} style={{color:'#f5f5f7'}}>{l.text.endsWith('_')?'█':''}</span></span>
+                : <span style={{color:'#a0aec0'}}>{l.text}</span>
+              }
             </div>
           ))}
         </div>
-      </div>
+      ) : (
+        /* Skills grid */
+        <div style={{flex:1,overflowY:'auto',padding:20}}>
+          {/* skillicons.dev image strips */}
+          <div style={{marginBottom:20,padding:16,background:'rgba(255,255,255,0.02)',border:'1px solid var(--border)',borderRadius:12}}>
+            <p style={{fontSize:11,color:'var(--text-tertiary)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:12}}>
+              Tech Stack Icons
+            </p>
+            <img
+              src="https://skillicons.dev/icons?i=python,java,js,php,cpp,react,nextjs,html,css,nodejs,express,laravel,mongodb,mysql,postgres,aws,docker,git,azure,redux&perline=10"
+              alt="Tech stack"
+              style={{maxWidth:'100%',borderRadius:8}}
+              onError={e=>{e.target.style.display='none';}}
+            />
+          </div>
+
+          {/* Category breakdown */}
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+            {CATS.map(cat=>(
+              <div key={cat.label} style={{
+                background:'rgba(255,255,255,0.025)',border:'1px solid rgba(255,255,255,0.07)',
+                borderRadius:12,padding:14,
+              }}>
+                <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:10}}>
+                  <div style={{width:8,height:8,borderRadius:'50%',background:cat.color}}/>
+                  <span style={{fontSize:11,fontWeight:700,color:'var(--text)',textTransform:'uppercase',letterSpacing:'0.07em'}}>
+                    {cat.label}
+                  </span>
+                </div>
+                <div style={{display:'flex',flexWrap:'wrap',gap:5}}>
+                  {[...cat.icons, ...cat.extras].map(s=>(
+                    <span key={s} style={{
+                      fontSize:11,padding:'3px 9px',borderRadius:20,
+                      background:`${cat.color}12`,border:`1px solid ${cat.color}28`,
+                      color:cat.color,fontFamily:'SF Mono,monospace',
+                    }}>{s}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

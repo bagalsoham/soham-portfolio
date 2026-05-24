@@ -3,204 +3,193 @@ import { useState } from 'react';
 
 const PROJECTS = [
   {
-    id: 1,
-    title: 'AI-Powered IT Support Agent',
-    subtitle: 'Bajaj SalesOne',
-    description:
-      'Multi-agent AI system to automate login issue and hierarchy issue diagnosis for Bajaj SalesOne application. Built workflow orchestration using LangGraph with separate agents for ticket validation, SQL execution, and issue analysis.',
-    tech: ['Python', 'LangGraph', 'LangChain', 'Azure OpenAI', 'Databricks', 'MLflow'],
-    color: '#0ea5e9',
-    emoji: '🤖',
-    highlights: [
-      'Multi-agent orchestration with LangGraph',
-      'SQL-based root cause analysis via Databricks',
+    id:1, emoji:'🤖',
+    title:'AI-Powered IT Support Agent',
+    subtitle:'Bajaj SalesOne · Bajaj Finserv',
+    desc:'Multi-agent AI system automating login and hierarchy issue diagnosis for Bajaj SalesOne. Built with LangGraph orchestration, Azure OpenAI, Databricks SQL, and MLflow Model Serving.',
+    tech:['Python','LangGraph','LangChain','Azure OpenAI','Databricks','MLflow','SQL'],
+    highlights:[
+      'Multi-agent orchestration — ticket validation, SQL execution, issue analysis',
+      'Azure OpenAI for extracting/validating ticket details from queries',
       'Deployed via MLflow Model Serving with REST API',
+      'Reduced diagnosis time from manual hours to seconds',
     ],
-    github: '#',
-    live: '#',
+    color:'#0ea5e9',
+    gradient:'linear-gradient(135deg,#0ea5e920,#6366f110)',
+    github:null, live:null,
   },
   {
-    id: 2,
-    title: 'Automated Data Lineage',
-    subtitle: 'Power BI Dependency Tracker',
-    description:
-      'Data lineage system to trace Power BI report dependencies back to source tables and columns. Implements BFS-based traversal in PySpark for lineage discovery across multiple workspaces.',
-    tech: ['PySpark', 'Databricks SQL', 'Delta Lake'],
-    color: '#8b5cf6',
-    emoji: '🔗',
-    highlights: [
-      'BFS traversal across multiple workspaces',
-      'Delta tables for optimized processing',
-      'Validation checks for accurate lineage',
+    id:2, emoji:'🔗',
+    title:'Automated Data Lineage',
+    subtitle:'Power BI · Bajaj Finserv',
+    desc:'Data lineage system tracing Power BI report dependencies to source tables/columns using BFS traversal in PySpark across multiple Databricks workspaces.',
+    tech:['PySpark','Databricks SQL','Delta Lake'],
+    highlights:[
+      'BFS-based traversal across multiple Power BI workspaces',
+      'Delta tables for optimized incremental processing',
+      'Validation checks ensuring accurate lineage tracking',
     ],
-    github: '#',
-    live: '#',
+    color:'#8b5cf6',
+    gradient:'linear-gradient(135deg,#8b5cf620,#ec489910)',
+    github:null, live:null,
   },
   {
-    id: 3,
-    title: 'MIS Report Automation Framework',
-    subtitle: 'Registry-Driven Pipeline',
-    description:
-      'Registry-driven MIS automation framework reducing report onboarding from 2–3 days to under 30 minutes. Enables 9+ automated MIS reports across business verticals with configurable metadata-driven templates.',
-    tech: ['Python', 'PySpark', 'Databricks', 'Delta Lake', 'Power Automate'],
-    color: '#10b981',
-    emoji: '📊',
-    highlights: [
-      'Reduced onboarding time by 95%+ (2–3 days → 30 min)',
-      '9+ automated MIS reports across verticals',
-      'Multi-agent pipeline for orchestration & validation',
+    id:3, emoji:'📊',
+    title:'MIS Report Automation Framework',
+    subtitle:'Registry-Driven Pipeline · Bajaj Finserv',
+    desc:'Registry-driven framework that cut report onboarding from 2–3 days to under 30 minutes. Enables 9+ automated MIS reports with metadata-driven templates and Power Automate email delivery.',
+    tech:['Python','PySpark','Databricks','Delta Lake','Power Automate'],
+    highlights:[
+      '95%+ reduction in onboarding time (days → 30 min)',
+      '9+ automated MIS reports across business verticals',
+      'Multi-agent pipeline: orchestration, SQL gen, KPI compute, validation',
+      'Power Automate integration for scheduled stakeholder reporting',
     ],
-    github: '#',
-    live: '#',
+    color:'#10b981',
+    gradient:'linear-gradient(135deg,#10b98120,#0ea5e910)',
+    github:null, live:null,
   },
   {
-    id: 4,
-    title: 'MergeBase',
-    subtitle: 'Git-Inspired Version Control System',
-    description:
-      'Git-inspired version control system with branching, repository management, and collaboration features. Built CLI commands (init, add, commit, push, pull) using Yargs with MongoDB and AWS storage.',
-    tech: ['Node.js', 'Express.js', 'MongoDB', 'React', 'AWS'],
-    color: '#f59e0b',
-    emoji: '🌿',
-    highlights: [
-      'Full CLI: init, add, commit, push, pull',
+    id:4, emoji:'🌿',
+    title:'MergeBase',
+    subtitle:'Git-Inspired Version Control System',
+    desc:'Git-inspired VCS with branching, repository management, and collaboration. CLI built with Yargs (init, add, commit, push, pull). Storage via MongoDB + AWS.',
+    tech:['Node.js','Express.js','MongoDB','React','AWS'],
+    highlights:[
+      'Full CLI: init, add, commit, push, pull using Yargs',
       'Branching and repository management',
-      'Cloud storage via MongoDB + AWS',
+      'Cloud storage via MongoDB + AWS S3',
+      'Collaboration features for team workflows',
     ],
-    github: 'https://github.com/SohamBagal',
-    live: '#',
+    color:'#f59e0b',
+    gradient:'linear-gradient(135deg,#f59e0b20,#ef444410)',
+    github:'https://github.com/bagalsoham', live:null,
   },
   {
-    id: 5,
-    title: 'LMS Platform',
-    subtitle: 'Learning Management System',
-    description:
-      'Multi-role learning management system for students, instructors, and administrators. Features authentication, course management, and payment integration with Stripe and PayPal.',
-    tech: ['Laravel', 'PHP', 'MySQL', 'Stripe', 'PayPal'],
-    color: '#ec4899',
-    emoji: '📚',
-    highlights: [
-      'Multi-role: Student, Instructor, Admin',
-      'Stripe & PayPal payment integration',
-      'Student progress dashboards',
+    id:5, emoji:'📚',
+    title:'LMS Platform',
+    subtitle:'Learning Management System',
+    desc:'Multi-role LMS for students, instructors, and admins. Full auth, course management, Stripe & PayPal payment integration, progress dashboards.',
+    tech:['Laravel','PHP','MySQL','Stripe','PayPal'],
+    highlights:[
+      'Multi-role: Student, Instructor, Admin portals',
+      'Stripe & PayPal payment gateway integration',
+      'Progress tracking dashboards with course analytics',
+      'Authentication with role-based access control',
     ],
-    github: 'https://github.com/SohamBagal',
-    live: '#',
+    color:'#ec4899',
+    gradient:'linear-gradient(135deg,#ec489920,#8b5cf610)',
+    github:'https://github.com/bagalsoham', live:null,
   },
 ];
 
 export default function ProjectsWindow() {
-  const [selected, setSelected] = useState(null);
+  const [sel, setSel] = useState(null);
 
-  if (selected !== null) {
-    const p = PROJECTS[selected];
+  if (sel !== null) {
+    const p = PROJECTS[sel];
     return (
-      <div style={{ padding: 24, height: '100%', overflowY: 'auto' }}>
-        <button
-          onClick={() => setSelected(null)}
-          style={{
-            display: 'flex', alignItems: 'center', gap: 6,
-            color: 'var(--accent)', fontSize: 13, background: 'none',
-            border: 'none', cursor: 'pointer', marginBottom: 20,
-          }}
-        >
-          ← Back to Projects
-        </button>
+      <div style={{height:'100%',overflowY:'auto',padding:24}}>
+        <button onClick={()=>setSel(null)} style={{
+          background:'none',border:'none',color:'var(--accent)',
+          fontSize:13,cursor:'pointer',display:'flex',alignItems:'center',gap:4,marginBottom:20,fontFamily:'inherit',
+        }}>← Back to All Projects</button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 20 }}>
-          <div style={{
-            width: 56, height: 56, borderRadius: 14, fontSize: 28,
-            background: `${p.color}22`, border: `1px solid ${p.color}33`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            {p.emoji}
-          </div>
-          <div>
-            <h1 style={{ fontSize: 20, fontWeight: 700 }}>{p.title}</h1>
-            <p style={{ fontSize: 13, color: p.color }}>{p.subtitle}</p>
+        {/* Header */}
+        <div style={{
+          padding:20,borderRadius:14,marginBottom:20,
+          background:p.gradient,border:`1px solid ${p.color}30`,
+        }}>
+          <div style={{display:'flex',gap:14,alignItems:'center'}}>
+            <div style={{
+              width:56,height:56,borderRadius:14,fontSize:26,
+              background:`${p.color}20`,border:`1px solid ${p.color}40`,
+              display:'flex',alignItems:'center',justifyContent:'center',
+            }}>{p.emoji}</div>
+            <div>
+              <h1 style={{fontSize:20,fontWeight:700}}>{p.title}</h1>
+              <p style={{fontSize:13,color:p.color,marginTop:3}}>{p.subtitle}</p>
+            </div>
           </div>
         </div>
 
-        <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: 20 }}>{p.description}</p>
+        <p style={{fontSize:14,color:'var(--text-secondary)',lineHeight:1.8,marginBottom:20}}>{p.desc}</p>
 
-        <div className="mac-divider" />
+        <div className="mac-div"/>
 
-        <div style={{ marginTop: 16, marginBottom: 20 }}>
-          <h3 style={{ fontSize: 12, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
-            Key Highlights
-          </h3>
-          {p.highlights.map((h, i) => (
-            <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 6, alignItems: 'flex-start' }}>
-              <span style={{ color: p.color, marginTop: 1 }}>▸</span>
-              <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{h}</span>
-            </div>
+        <h3 style={{fontSize:12,color:'var(--text-tertiary)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:12,marginTop:16}}>
+          Key Highlights
+        </h3>
+        {p.highlights.map((h,i)=>(
+          <div key={i} style={{display:'flex',gap:8,marginBottom:7,alignItems:'flex-start'}}>
+            <span style={{color:p.color,flexShrink:0,marginTop:2}}>▸</span>
+            <span style={{fontSize:13,color:'var(--text-secondary)',lineHeight:1.7}}>{h}</span>
+          </div>
+        ))}
+
+        <h3 style={{fontSize:12,color:'var(--text-tertiary)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:12,marginTop:20}}>
+          Tech Stack
+        </h3>
+        <div style={{display:'flex',flexWrap:'wrap',gap:7}}>
+          {p.tech.map(t=>(
+            <span key={t} style={{
+              fontSize:12,padding:'4px 12px',borderRadius:20,
+              background:`${p.color}12`,border:`1px solid ${p.color}30`,
+              color:p.color,fontFamily:'SF Mono,monospace',
+            }}>{t}</span>
           ))}
         </div>
 
-        <div style={{ marginBottom: 20 }}>
-          <h3 style={{ fontSize: 12, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
-            Tech Stack
-          </h3>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-            {p.tech.map((t) => (
-              <span key={t} className="skill-badge" style={{ borderColor: `${p.color}33`, color: p.color, background: `${p.color}11` }}>
-                {t}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', gap: 10 }}>
-          {p.github !== '#' && (
+        {p.github&&(
+          <div style={{marginTop:20}}>
             <a href={p.github} target="_blank" rel="noreferrer">
-              <button className="mac-btn" style={{ background: 'rgba(255,255,255,0.08)', color: 'var(--text)', border: '1px solid var(--border)' }}>
-                🐙 GitHub
+              <button className="mac-btn" style={{background:'rgba(255,255,255,0.07)',color:'var(--text)',border:'1px solid var(--border)'}}>
+                🐙 View on GitHub
               </button>
             </a>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     );
   }
 
   return (
-    <div style={{ padding: 20, height: '100%', overflowY: 'auto' }}>
-      <p style={{ fontSize: 12, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 16 }}>
-        {PROJECTS.length} Projects
+    <div style={{height:'100%',overflowY:'auto',padding:20}}>
+      <p style={{fontSize:11,color:'var(--text-tertiary)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:14}}>
+        {PROJECTS.length} Projects — click to expand
       </p>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-        {PROJECTS.map((p, i) => (
-          <div
-            key={p.id}
-            className="project-card"
-            onClick={() => setSelected(i)}
-            style={{ borderColor: selected === i ? p.color : undefined }}
-          >
-            <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 10 }}>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+        {PROJECTS.map((p,i)=>(
+          <div key={p.id} className="proj-card" onClick={()=>setSel(i)}>
+            {/* Card header gradient strip */}
+            <div style={{
+              height:4,borderRadius:'4px 4px 0 0',
+              background:`linear-gradient(90deg,${p.color},${p.color}50)`,
+              margin:'-16px -16px 12px -16px',
+            }}/>
+            <div style={{display:'flex',gap:10,alignItems:'flex-start',marginBottom:10}}>
               <div style={{
-                width: 40, height: 40, borderRadius: 10, fontSize: 20, flexShrink: 0,
-                background: `${p.color}1a`, border: `1px solid ${p.color}30`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                {p.emoji}
-              </div>
+                width:38,height:38,borderRadius:10,fontSize:18,flexShrink:0,
+                background:`${p.color}18`,border:`1px solid ${p.color}28`,
+                display:'flex',alignItems:'center',justifyContent:'center',
+              }}>{p.emoji}</div>
               <div>
-                <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)', lineHeight: 1.3 }}>{p.title}</p>
-                <p style={{ fontSize: 11, color: p.color, marginTop: 2 }}>{p.subtitle}</p>
+                <p style={{fontSize:13,fontWeight:600,lineHeight:1.3,color:'var(--text)'}}>{p.title}</p>
+                <p style={{fontSize:11,color:p.color,marginTop:2}}>{p.subtitle.split('·')[0]}</p>
               </div>
             </div>
-            <p style={{ fontSize: 12, color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: 10 }}>
-              {p.description.slice(0, 100)}...
+            <p style={{fontSize:12,color:'var(--text-secondary)',lineHeight:1.6,marginBottom:10}}>
+              {p.desc.slice(0,90)}...
             </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-              {p.tech.slice(0, 3).map((t) => (
-                <span key={t} style={{ fontSize: 10, color: 'var(--text-tertiary)', background: 'rgba(255,255,255,0.04)', padding: '2px 7px', borderRadius: 10, border: '1px solid var(--border)' }}>
-                  {t}
-                </span>
+            <div style={{display:'flex',flexWrap:'wrap',gap:4}}>
+              {p.tech.slice(0,3).map(t=>(
+                <span key={t} style={{
+                  fontSize:10,padding:'2px 7px',borderRadius:10,
+                  background:'rgba(255,255,255,0.04)',border:'1px solid var(--border)',
+                  color:'var(--text-tertiary)',fontFamily:'monospace',
+                }}>{t}</span>
               ))}
-              {p.tech.length > 3 && (
-                <span style={{ fontSize: 10, color: 'var(--text-tertiary)', padding: '2px 6px' }}>+{p.tech.length - 3} more</span>
-              )}
+              {p.tech.length>3&&<span style={{fontSize:10,color:'var(--text-tertiary)',padding:'2px 4px'}}>+{p.tech.length-3}</span>}
             </div>
           </div>
         ))}

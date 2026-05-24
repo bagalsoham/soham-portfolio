@@ -1,178 +1,124 @@
 'use client';
 import { useState } from 'react';
 
-const sections = ['Profile', 'Education', 'Achievements', 'Interests'];
+const SECTIONS = [
+  { id:'profile',  label:'Profile',      emoji:'🧑‍💻' },
+  { id:'edu',      label:'Education',    emoji:'🎓' },
+  { id:'achieve',  label:'Achievements', emoji:'🏆' },
+  { id:'misc',     label:'Misc',         emoji:'🎯' },
+];
 
 export default function AboutWindow() {
-  const [active, setActive] = useState('Profile');
-
-  const sidebar = (
-    <>
-      <p style={{ fontSize: 11, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8, padding: '0 4px' }}>
-        Favourites
-      </p>
-      {sections.map((s) => (
-        <div
-          key={s}
-          className={`finder-sidebar-item ${active === s ? 'active' : ''}`}
-          onClick={() => setActive(s)}
-        >
-          <span>{s === 'Profile' ? '👤' : s === 'Education' ? '🎓' : s === 'Achievements' ? '🏆' : '🎯'}</span>
-          {s}
-        </div>
-      ))}
-      <div className="mac-divider" />
-      <p style={{ fontSize: 11, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8, padding: '0 4px' }}>
-        Links
-      </p>
-      {[
-        { label: 'GitHub', href: 'https://github.com/SohamBagal', emoji: '🐙' },
-        { label: 'LinkedIn', href: 'https://linkedin.com/in/soham-bagal', emoji: '💼' },
-        { label: 'Email', href: 'mailto:bagalsoham1717@gmail.com', emoji: '✉️' },
-      ].map((l) => (
-        <a
-          key={l.label}
-          href={l.href}
-          target="_blank"
-          rel="noreferrer"
-          className="finder-sidebar-item"
-          style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}
-        >
-          <span>{l.emoji}</span>
-          {l.label}
-        </a>
-      ))}
-    </>
-  );
+  const [active, setActive] = useState('profile');
 
   const content = {
-    Profile: (
-      <div style={{ padding: 28 }}>
-        {/* Avatar + name */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 24 }}>
-          <div
-            style={{
-              width: 80,
-              height: 80,
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #0ea5e9, #6366f1)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: 32,
-              flexShrink: 0,
-              boxShadow: '0 4px 20px rgba(14,165,233,0.4)',
-            }}
-          >
-            {/* Replace with your photo: <img src="/avatar.jpg" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} /> */}
+    profile: (
+      <div style={{padding:'28px 32px',overflowY:'auto',height:'100%'}}>
+        {/* Hero */}
+        <div style={{display:'flex',alignItems:'center',gap:20,marginBottom:28}}>
+          <div style={{
+            width:84,height:84,borderRadius:'50%',flexShrink:0,
+            background:'linear-gradient(135deg,#0ea5e9 0%,#6366f1 100%)',
+            display:'flex',alignItems:'center',justifyContent:'center',fontSize:36,
+            boxShadow:'0 0 0 3px rgba(14,165,233,0.3),0 8px 24px rgba(14,165,233,0.2)',
+          }}>
+            {/* REPLACE: <img src="/avatar.jpg" style={{width:'100%',height:'100%',borderRadius:'50%',objectFit:'cover'}}/> */}
             🧑‍💻
           </div>
           <div>
-            <h1 style={{ fontSize: 22, fontWeight: 700, color: 'var(--text)' }}>Soham Mahendra Bagal</h1>
-            <p style={{ fontSize: 14, color: 'var(--accent)', marginTop: 2 }}>Data Engineer & Full Stack Developer</p>
-            <p style={{ fontSize: 12, color: 'var(--text-tertiary)', marginTop: 4 }}>📍 Mumbai, Maharashtra</p>
+            <h1 style={{fontSize:24,fontWeight:700,letterSpacing:-0.5}}>Soham Mahendra Bagal</h1>
+            <p style={{fontSize:14,color:'var(--accent)',marginTop:3,fontWeight:500}}>
+              Data Engineer &amp; Full Stack Developer
+            </p>
+            <div style={{display:'flex',gap:12,marginTop:6,flexWrap:'wrap'}}>
+              {['📍 Mumbai','🎓 KJ Somaiya','📅 2022–Present'].map(t=>(
+                <span key={t} style={{fontSize:12,color:'var(--text-tertiary)'}}>{t}</span>
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="mac-divider" />
-
-        {/* Bio */}
-        <div style={{ marginTop: 16, marginBottom: 20 }}>
-          <h2 style={{ fontSize: 12, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>Profile Summary</h2>
-          <p style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.7 }}>
-            B.Tech Information Technology student at KJ Somaiya School of Engineering with hands-on experience in
-            <strong style={{ color: 'var(--accent)' }}> data engineering</strong>, AI applications, and full-stack development.
-            Currently a Data Engineering Intern at <strong style={{ color: 'var(--text)' }}>Bajaj Finserv</strong>, building
-            PySpark pipelines, AI-driven diagnostic systems, and Power BI automation workflows.
-          </p>
+        {/* GitHub contrib strip */}
+        <div style={{marginBottom:20}}>
+          <img
+            src="https://github-readme-stats.vercel.app/api?username=bagalsoham&show_icons=true&theme=dark&bg_color=00000000&hide_border=true&text_color=ababab&title_color=0ea5e9&icon_color=0ea5e9"
+            alt="GitHub Stats"
+            style={{maxWidth:'100%',borderRadius:10}}
+            onError={e=>e.target.style.display='none'}
+          />
         </div>
 
-        <div className="mac-divider" />
+        <div className="mac-div"/>
 
-        {/* Quick stats */}
-        <div style={{ marginTop: 16, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
-          {[
-            { label: 'CGPA', value: '7.9' },
-            { label: 'Internships', value: '2' },
-            { label: 'Projects', value: '5+' },
-          ].map((s) => (
-            <div
-              key={s.label}
-              style={{
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid var(--border)',
-                borderRadius: 10,
-                padding: '12px 16px',
-                textAlign: 'center',
-              }}
-            >
-              <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--accent)' }}>{s.value}</div>
-              <div style={{ fontSize: 11, color: 'var(--text-tertiary)', marginTop: 2 }}>{s.label}</div>
+        {/* Bio */}
+        <p style={{fontSize:14,color:'var(--text-secondary)',lineHeight:1.8,marginBottom:20}}>
+          B.Tech IT student building <strong style={{color:'var(--accent)'}}>data pipelines, AI agents, and full-stack apps</strong>.
+          Currently Data Engineering Intern at <strong style={{color:'var(--text)'}}>Bajaj Finserv</strong> — working with
+          PySpark, Azure OpenAI, LangGraph, and Databricks. Previously built a RAG-based PDF query tool at Commonwealth.
+          Won the <strong style={{color:'var(--yellow)'}}>U.S. Consulate Climate Hackathon</strong> 🏆.
+        </p>
+
+        {/* Stats row */}
+        <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:10,marginBottom:20}}>
+          {[{v:'7.9',l:'CGPA'},{v:'2',l:'Internships'},{v:'5+',l:'Projects'},{v:'3+',l:'Years Coding'}].map(s=>(
+            <div key={s.l} style={{
+              background:'rgba(255,255,255,0.03)',border:'1px solid var(--border)',
+              borderRadius:10,padding:'12px 8px',textAlign:'center',
+            }}>
+              <div style={{fontSize:22,fontWeight:700,color:'var(--accent)'}}>{s.v}</div>
+              <div style={{fontSize:10,color:'var(--text-tertiary)',marginTop:2,textTransform:'uppercase',letterSpacing:'0.06em'}}>{s.l}</div>
             </div>
           ))}
         </div>
 
-        <div style={{ marginTop: 20 }}>
-          <h2 style={{ fontSize: 12, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>Contact</h2>
+        <div className="mac-div"/>
+
+        {/* Contact */}
+        <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
           {[
-            { icon: '✉️', value: 'bagalsoham1717@gmail.com' },
-            { icon: '📱', value: '+91 9967550047' },
-          ].map((c) => (
-            <div key={c.icon} style={{ display: 'flex', gap: 8, marginBottom: 6, fontSize: 13, color: 'var(--text-secondary)' }}>
-              <span>{c.icon}</span>
-              <span>{c.value}</span>
-            </div>
+            {emoji:'✉️',label:'bagalsoham1717@gmail.com',href:'mailto:bagalsoham1717@gmail.com'},
+            {emoji:'📱',label:'+91 9967550047',href:'tel:+919967550047'},
+            {emoji:'🐙',label:'bagalsoham',href:'https://github.com/bagalsoham'},
+            {emoji:'💼',label:'LinkedIn',href:'https://linkedin.com/in/soham-bagal'},
+          ].map(c=>(
+            <a key={c.label} href={c.href} target="_blank" rel="noreferrer" style={{textDecoration:'none'}}>
+              <div style={{
+                display:'flex',gap:6,alignItems:'center',
+                background:'rgba(255,255,255,0.04)',border:'1px solid var(--border)',
+                borderRadius:8,padding:'6px 12px',fontSize:12,color:'var(--text-secondary)',
+                cursor:'pointer',transition:'all 0.15s',
+              }}
+                onMouseEnter={e=>{e.currentTarget.style.borderColor='rgba(14,165,233,0.4)';e.currentTarget.style.color='var(--accent)';}}
+                onMouseLeave={e=>{e.currentTarget.style.borderColor='var(--border)';e.currentTarget.style.color='var(--text-secondary)';}}
+              >
+                <span>{c.emoji}</span><span>{c.label}</span>
+              </div>
+            </a>
           ))}
         </div>
       </div>
     ),
 
-    Education: (
-      <div style={{ padding: 28 }}>
-        <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 20 }}>Education</h2>
+    edu: (
+      <div style={{padding:'24px 28px',overflowY:'auto',height:'100%'}}>
+        <h2 style={{fontSize:18,fontWeight:700,marginBottom:20}}>Education</h2>
         {[
-          {
-            degree: 'B.Tech in Information Technology',
-            institute: 'KJ Somaiya School of Engineering (SVU)',
-            duration: '2022 – Present',
-            detail: 'CGPA: 7.9 (Till Semester 7)',
-            icon: '🏛️',
-          },
-          {
-            degree: 'HSC — Science Stream',
-            institute: 'BH Chate Junior College, Pune',
-            duration: '2020 – 2022',
-            detail: '86.5%',
-            icon: '📚',
-          },
-          {
-            degree: 'SSC',
-            institute: "St. John's High School, Mumbai",
-            duration: 'Till 2020',
-            detail: '91.2%',
-            icon: '🏫',
-          },
-        ].map((e, i) => (
-          <div
-            key={i}
-            style={{
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid var(--border)',
-              borderRadius: 12,
-              padding: 16,
-              marginBottom: 12,
-              display: 'flex',
-              gap: 14,
-              alignItems: 'flex-start',
-            }}
-          >
-            <div style={{ fontSize: 28 }}>{e.icon}</div>
+          {icon:'🏛️',deg:'B.Tech — Information Technology',inst:'KJ Somaiya School of Engineering (SVU), Mumbai',dur:'2022 – Present',grade:'CGPA: 7.9 / 10',color:'#0ea5e9'},
+          {icon:'📚',deg:'HSC — Science Stream',inst:'BH Chate Junior College, Pune',dur:'2020 – 2022',grade:'86.5%',color:'#8b5cf6'},
+          {icon:'🏫',deg:'SSC',inst:"St. John's High School, Mumbai",dur:'Till 2020',grade:'91.2%',color:'#10b981'},
+        ].map((e,i)=>(
+          <div key={i} style={{
+            display:'flex',gap:14,marginBottom:14,
+            background:'rgba(255,255,255,0.03)',border:`1px solid ${e.color}22`,
+            borderLeft:`3px solid ${e.color}`,borderRadius:'0 12px 12px 0',padding:16,
+          }}>
+            <span style={{fontSize:30}}>{e.icon}</span>
             <div>
-              <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--text)' }}>{e.degree}</p>
-              <p style={{ fontSize: 13, color: 'var(--accent)', marginTop: 2 }}>{e.institute}</p>
-              <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>
-                <span style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>📅 {e.duration}</span>
-                <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>⭐ {e.detail}</span>
+              <p style={{fontSize:15,fontWeight:600}}>{e.deg}</p>
+              <p style={{fontSize:13,color:e.color,marginTop:2}}>{e.inst}</p>
+              <div style={{display:'flex',gap:16,marginTop:5}}>
+                <span style={{fontSize:12,color:'var(--text-tertiary)'}}>{e.dur}</span>
+                <span style={{fontSize:12,color:'var(--text-secondary)',fontWeight:500}}>⭐ {e.grade}</span>
               </div>
             </div>
           </div>
@@ -180,62 +126,60 @@ export default function AboutWindow() {
       </div>
     ),
 
-    Achievements: (
-      <div style={{ padding: 28 }}>
-        <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 20 }}>Achievements</h2>
+    achieve: (
+      <div style={{padding:'24px 28px',overflowY:'auto',height:'100%'}}>
+        <h2 style={{fontSize:18,fontWeight:700,marginBottom:20}}>Achievements & Certs</h2>
         {[
-          {
-            title: 'Climate Hackathon Winner 🏆',
-            org: 'U.S. Consulate',
-            desc: 'Won the Climate Hackathon organized by the U.S. Consulate. Developed a CNN-based temperature measurement system and a Flask–React application for predicting NO2 pollution levels.',
-          },
-          {
-            title: 'Inter-Department Cricket Tournament Winner 🏏',
-            org: 'KJ Somaiya SOE',
-            desc: 'Won the inter-department cricket tournament at college.',
-          },
-          {
-            title: 'Secure & Sustainable Web Development',
-            org: 'Certification',
-            desc: 'Completed a 5-Day Training Program in Secure & Sustainable Web Development.',
-          },
-        ].map((a, i) => (
-          <div
-            key={i}
-            style={{
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid var(--border)',
-              borderRadius: 12,
-              padding: 16,
-              marginBottom: 12,
-            }}
-          >
-            <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--text)' }}>{a.title}</p>
-            <p style={{ fontSize: 12, color: 'var(--accent)', marginTop: 2 }}>{a.org}</p>
-            <p style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 6, lineHeight: 1.6 }}>{a.desc}</p>
+          {emoji:'🏆',title:'Climate Hackathon Winner',sub:'U.S. Consulate',desc:'Built a CNN-based temperature measurement system and Flask–React app for NO2 pollution prediction.',color:'#f59e0b'},
+          {emoji:'🏏',title:'Inter-Department Cricket Tournament',sub:'KJ Somaiya SOE',desc:'Won the inter-department cricket championship at college.',color:'#10b981'},
+          {emoji:'📜',title:'Secure & Sustainable Web Development',sub:'5-Day Certification Program',desc:'Completed intensive training in secure, sustainable web development practices.',color:'#8b5cf6'},
+        ].map((a,i)=>(
+          <div key={i} style={{
+            background:'rgba(255,255,255,0.03)',border:`1px solid ${a.color}22`,
+            borderRadius:12,padding:16,marginBottom:12,
+          }}>
+            <div style={{display:'flex',gap:10,alignItems:'center',marginBottom:6}}>
+              <span style={{fontSize:24}}>{a.emoji}</span>
+              <div>
+                <p style={{fontSize:14,fontWeight:600}}>{a.title}</p>
+                <p style={{fontSize:12,color:a.color}}>{a.sub}</p>
+              </div>
+            </div>
+            <p style={{fontSize:13,color:'var(--text-secondary)',lineHeight:1.7}}>{a.desc}</p>
           </div>
         ))}
       </div>
     ),
 
-    Interests: (
-      <div style={{ padding: 28 }}>
-        <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 20 }}>Interests & Languages</h2>
-        <div style={{ marginBottom: 24 }}>
-          <h3 style={{ fontSize: 13, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Interests</h3>
-          {['Data Engineering', 'Software Development', 'Cricket'].map((i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)' }} />
-              <span style={{ fontSize: 14, color: 'var(--text-secondary)' }}>{i}</span>
-            </div>
-          ))}
+    misc: (
+      <div style={{padding:'24px 28px',overflowY:'auto',height:'100%'}}>
+        <h2 style={{fontSize:18,fontWeight:700,marginBottom:20}}>Interests & Languages</h2>
+
+        <div style={{marginBottom:24}}>
+          <p style={{fontSize:12,color:'var(--text-tertiary)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:12}}>
+            Professional Interests
+          </p>
+          <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
+            {['🔧 Data Engineering','💻 Full Stack Dev','🤖 AI/ML Systems','☁️ Cloud Architecture','🏏 Cricket'].map(i=>(
+              <span key={i} style={{
+                padding:'8px 14px',borderRadius:20,
+                background:'rgba(14,165,233,0.08)',border:'1px solid rgba(14,165,233,0.2)',
+                color:'var(--accent)',fontSize:13,
+              }}>{i}</span>
+            ))}
+          </div>
         </div>
-        <div className="mac-divider" />
-        <div style={{ marginTop: 16 }}>
-          <h3 style={{ fontSize: 13, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Languages</h3>
-          {['English', 'Hindi', 'Marathi'].map((l) => (
-            <div key={l} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-              <span style={{ fontSize: 14, color: 'var(--text-secondary)' }}>🌐 {l}</span>
+
+        <div className="mac-div"/>
+
+        <div style={{marginTop:16}}>
+          <p style={{fontSize:12,color:'var(--text-tertiary)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:12}}>
+            Languages
+          </p>
+          {['🇬🇧 English','🇮🇳 Hindi','🪔 Marathi'].map(l=>(
+            <div key={l} style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10}}>
+              <span style={{fontSize:14,color:'var(--text-secondary)'}}>{l}</span>
+              <span style={{fontSize:12,color:'var(--text-tertiary)',background:'rgba(255,255,255,0.05)',padding:'2px 10px',borderRadius:20}}>Fluent</span>
             </div>
           ))}
         </div>
@@ -244,51 +188,47 @@ export default function AboutWindow() {
   };
 
   return (
-    <>
-      {/* Sidebar injection via window sidebarContent prop is handled in Desktop */}
-      <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-        {/* Finder toolbar */}
-        <div
-          style={{
-            height: 38,
-            background: 'rgba(255,255,255,0.02)',
-            borderBottom: '1px solid var(--border)',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0 16px',
-            gap: 8,
-            flexShrink: 0,
-          }}
-        >
-          <span style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>soham.bagal</span>
-          <span style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>›</span>
-          <span style={{ fontSize: 12, color: 'var(--text)' }}>{active}</span>
+    <div style={{display:'flex',height:'100%',overflow:'hidden'}}>
+      {/* Sidebar */}
+      <div className="sidebar" style={{width:170,padding:'12px 8px',flexShrink:0,overflowY:'auto'}}>
+        <p style={{fontSize:10,color:'var(--text-tertiary)',textTransform:'uppercase',letterSpacing:'0.09em',marginBottom:8,padding:'0 6px'}}>
+          Favourites
+        </p>
+        {SECTIONS.map(s=>(
+          <div key={s.id} className={`sb-item ${active===s.id?'active':''}`} onClick={()=>setActive(s.id)}>
+            <span>{s.emoji}</span><span>{s.label}</span>
+          </div>
+        ))}
+        <div className="mac-div"/>
+        <p style={{fontSize:10,color:'var(--text-tertiary)',textTransform:'uppercase',letterSpacing:'0.09em',marginBottom:8,padding:'0 6px'}}>
+          Locations
+        </p>
+        {[
+          {e:'🐙',l:'GitHub',href:'https://github.com/bagalsoham'},
+          {e:'💼',l:'LinkedIn',href:'https://linkedin.com/in/soham-bagal'},
+        ].map(l=>(
+          <a key={l.l} href={l.href} target="_blank" rel="noreferrer" style={{textDecoration:'none'}}>
+            <div className="sb-item"><span>{l.e}</span><span>{l.l}</span></div>
+          </a>
+        ))}
+      </div>
+
+      {/* Content pane */}
+      <div style={{flex:1,overflow:'hidden',display:'flex',flexDirection:'column'}}>
+        {/* Breadcrumb toolbar */}
+        <div style={{
+          height:36,background:'rgba(0,0,0,0.15)',borderBottom:'1px solid var(--border)',
+          display:'flex',alignItems:'center',padding:'0 16px',gap:6,flexShrink:0,
+        }}>
+          <span style={{fontSize:12,color:'var(--text-tertiary)'}}>soham.bagal</span>
+          <span style={{fontSize:12,color:'var(--text-tertiary)'}}>›</span>
+          <span style={{fontSize:12,color:'var(--text)'}}>{SECTIONS.find(s=>s.id===active)?.label}</span>
         </div>
         {/* Content */}
-        <div style={{ flex: 1, overflowY: 'auto' }}>
+        <div style={{flex:1,overflow:'hidden'}}>
           {content[active]}
         </div>
       </div>
-    </>
-  );
-}
-
-export function AboutSidebar({ active, setActive }) {
-  return (
-    <>
-      <p style={{ fontSize: 11, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8, padding: '0 4px' }}>
-        Favourites
-      </p>
-      {sections.map((s) => (
-        <div
-          key={s}
-          className={`finder-sidebar-item ${active === s ? 'active' : ''}`}
-          onClick={() => setActive(s)}
-        >
-          <span>{s === 'Profile' ? '👤' : s === 'Education' ? '🎓' : s === 'Achievements' ? '🏆' : '🎯'}</span>
-          {s}
-        </div>
-      ))}
-    </>
+    </div>
   );
 }
